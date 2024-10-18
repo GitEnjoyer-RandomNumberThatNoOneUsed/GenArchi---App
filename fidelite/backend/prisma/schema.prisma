@@ -1,0 +1,133 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl"]
+}
+
+model User {
+  id          Int    @id @default(autoincrement())
+  email       String @unique @default("")
+  name        String @default("")
+  description String @default("")
+}
+
+model Fidelity{
+  id Int @id @default(autoincrement())
+
+  createdAt DateTime @default(now())
+  modifiedAt DateTime @updatedAt
+
+  credit Float @default(0)
+  dateCreation DateTime @default(now())
+}
+
+model Sprint0 {
+  id         Int    @id @default(autoincrement())
+  text       String @default("")
+  createdAt  DateTime @default(now())
+  modifiedAt DateTime @updatedAt
+  appName String @default("fidelite")
+}
+
+// model Client {
+//   id                Int      @id @default(autoincrement())
+//   e_commerce_id     Int      @default(0)
+//   first_name        String   @default("Non renseigné")
+//   last_name         String   @default("Non renseigné")
+//   address           String   @default("Non renseignée")
+//   email             String   @unique @default("")
+//   phone             String   @unique @default("")
+//   gender            String   @default("M")
+//   profession        String   @default("Autre")
+//   birth_date        DateTime @default("2000-01-01T00:00:00Z")
+//   registration_date DateTime @default(now())
+//   loyalty_level     String   @default("Non renseigné")
+//   createdAt         DateTime @default(now())
+//   application       String   @default("fidelité")
+//   modifiedAt        DateTime @updatedAt
+
+//   transactions      Transaction[]
+//   purchases         Purchase[]
+//   loyalty_points    LoyaltyPoints[]
+// }
+
+// model Purchase {
+//   id                Int      @id @default(autoincrement())
+//   order_id          Int      @default(0)
+//   client_id         Int      @default(0)
+//   price             Float    @default(0)
+//   date              DateTime @default(now())
+//   time              DateTime @default(now())
+//   createdAt         DateTime @default(now())
+//   application       String   @default("fidelité")
+//   modifiedAt        DateTime @updatedAt
+
+//   client            Client   @relation(fields: [client_id], references: [id])
+//   products          Product[]
+// }
+
+// model Product {
+//   id                Int      @id @default(autoincrement())
+//   description       String   @default("Non renseigné")
+//   price             Float    @default(0)
+//   type              String   @default("Non renseigné")
+//   createdAt         DateTime @default(now())
+//   application       String   @default("fidelité")
+//   modifiedAt        DateTime @updatedAt
+
+//   purchases         Purchase[]
+// }
+
+// model Voucher {
+//   id                Int      @id @default(autoincrement())
+//   amount            Float    @default(0)
+//   creation_date     DateTime @default(now())
+//   expiration_date   DateTime @default(now())
+//   status            String   @default("Non utilisé")
+//   createdAt         DateTime @default(now())
+//   application       String   @default("fidelité")
+//   modifiedAt        DateTime @updatedAt
+// }
+
+// model LoyaltyPoints {
+//   id                Int      @id @default(autoincrement())
+//   points_amount     Float    @default(0)
+//   attribution_date  DateTime @default(now())
+//   expiration_date   DateTime @default(now())
+//   createdAt         DateTime @default(now())
+//   application       String   @default("fidelité")
+//   modifiedAt        DateTime @updatedAt
+
+//   client            Client   @relation(fields: [id], references: [id])
+// }
+
+// model LoyaltyProgram {
+//   id                Int      @id @default(autoincrement())
+//   name              String   @default("Non renseigné")
+//   description       String   @default("Non renseigné")
+//   start_date        DateTime @default(now())
+//   end_date          DateTime @default(now())
+//   createdAt         DateTime @default(now())
+//   application       String   @default("fidelité")
+//   modifiedAt        DateTime @updatedAt
+
+//   transactions      Transaction[]
+// }
+
+// model Transaction {
+//   id                Int      @id @default(autoincrement())
+//   client_id         Int      @default(0)
+//   amount            Float    @default(0)
+//   date              DateTime @default(now())
+//   type              String   @default("Non renseigné")
+//   createdAt         DateTime @default(now())
+//   application       String   @default("fidelité")
+//   modifiedAt        DateTime @updatedAt
+
+//   client            Client   @relation(fields: [client_id], references: [id])
+//   loyalty_program   LoyaltyProgram @relation(fields: [id], references: [id])
+// }
