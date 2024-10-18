@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 services:
   frontend:
     image: node:18
@@ -9,19 +9,24 @@ services:
     depends_on:
       - backend
     ports:
-      - '80:5173'
+      - "80:5173"
     volumes:
       - ./frontend:/app
-  
+
   backend:
     image: node:18.18-alpine
-    entrypoint: ["sh", "-c", "cd /app; npm install; npx prisma generate; npx prisma migrate dev --name init; npm run start:dev"]
+    entrypoint:
+      [
+        "sh",
+        "-c",
+        "cd /app; npm install; npx prisma generate; npx prisma migrate dev --name init; npm run start:dev",
+      ]
     container_name: backend
     depends_on:
       - db
       - rabbitmq
     ports:
-      - '3000:3000'
+      - "3000:3000"
     volumes:
       - ./backend:/app
 
@@ -33,10 +38,10 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: mydatabase
     ports:
-      - '5432:5432'
+      - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
-  
+
   loki:
     image: grafana/loki:2.9.2
     container_name: loki
@@ -46,7 +51,6 @@ services:
     logging:
       driver: none
 
-  
   grafana:
     environment:
       - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
@@ -76,12 +80,12 @@ services:
       - "3001:3000"
     logging:
       driver: none
-  
+
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
     ports:
-      - "5672:5672"  # Port pour AMQP
+      - "5672:5672" # Port pour AMQP
       - "15672:15672" # Port pour le management plugin
     environment:
       RABBITMQ_DEFAULT_USER: user
@@ -89,24 +93,24 @@ services:
     logging:
       driver: none
 
-  kong:
-    image: kong:latest
-    container_name: kong
-    environment:
-      KONG_DATABASE: off
-      KONG_ADMIN_ACCESS_LOG: /dev/stdout
-      KONG_ADMIN_ERROR_LOG: /dev/stderr
-      KONG_PROXY_ACCESS_LOG: /dev/stdout
-      KONG_PROXY_ERROR_LOG: /dev/stderr
-      KONG_ADMIN_LISTEN: 0.0.0.0:8001
-      KONG_DECLARATIVE_CONFIG: /etc/kong/kong.yml
-    ports:
-      - 8000:8000  # Proxy port
-      - 8443:8443  # Proxy SSL port
-      - 8001:8001  # Admin API port
-      - 8444:8444  # Admin API SSL port
-    volumes:
-      - ./kong.yml:/etc/kong/kong.yml
+  # kong:
+  #   image: kong:latest
+  #   container_name: kong
+  #   environment:
+  #     KONG_DATABASE: off
+  #     KONG_ADMIN_ACCESS_LOG: /dev/stdout
+  #     KONG_ADMIN_ERROR_LOG: /dev/stderr
+  #     KONG_PROXY_ACCESS_LOG: /dev/stdout
+  #     KONG_PROXY_ERROR_LOG: /dev/stderr
+  #     KONG_ADMIN_LISTEN: 0.0.0.0:8001
+  #     KONG_DECLARATIVE_CONFIG: /etc/kong/kong.yml
+  #   ports:
+  #     - 8000:8000  # Proxy port
+  #     - 8443:8443  # Proxy SSL port
+  #     - 8001:8001  # Admin API port
+  #     - 8444:8444  # Admin API SSL port
+  #   volumes:
+  #     - ./kong.yml:/etc/kong/kong.yml
 
 volumes:
   db-data:
