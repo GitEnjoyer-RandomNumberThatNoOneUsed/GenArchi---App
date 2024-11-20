@@ -12,7 +12,14 @@ const MyComponent: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    axios.get(`${process.env.BACKEND_URL}/test`)
+    const backendUrl = process.env.BACKEND_URL;
+    if (!backendUrl) {
+      console.error("BACKEND_URL is not defined!");
+      setError("Backend URL is not defined");
+      return;
+    }
+
+    axios.get(`${backendUrl}/test`)
       .then(response => {
         const fetchedItems = Array.isArray(response.data) ? response.data : [];
         setItems(fetchedItems);
@@ -30,9 +37,17 @@ const MyComponent: React.FC = () => {
     }
 
     const newItem = { name: newItemName };
-    axios.post(`${process.env.BACKEND_URL}/test/create`, newItem)
+    const backendUrl = process.env.BACKEND_URL;
+
+    if (!backendUrl) {
+      console.error("Backend URL is not defined");
+      setError("Backend URL is not defined");
+      return;
+    }
+
+    axios.post(`${backendUrl}/test/create`, newItem)
       .then(response => {
-        setItems([...items, response.data]);
+        setItems(prevItems => [...prevItems, response.data]); // Mise à jour fonctionnelle de l'état
         setNewItemName('');
         setError(null);
       })
@@ -76,4 +91,5 @@ const MyComponent: React.FC = () => {
     </div>
   );
 };
+
 export default MyComponent;
