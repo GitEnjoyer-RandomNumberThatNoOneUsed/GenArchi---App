@@ -1,38 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Clock from "./Clock";
 
-import { useNavigate } from "react-router-dom"; // Import useNavigate
-
 interface BannerProps {
-  applicationsName: string;
+  subtitle: string;
+  redirectPath: string;
 }
 
-const Banner: React.FC<BannerProps> = ({ applicationsName }) => {
-  const navigate = useNavigate(); // Use navigate for redirection
-
-
-  const handleTitleClick = () => {
-    navigate("/"); // Redirect to homepage
-  };
-
+const Banner: React.FC<BannerProps> = ({ subtitle }) => {
   return (
-    <div className="flex items-center justify-between px-6 py-4 text-white bg-blue-500">
-      <div className="flex-none">
-        <Clock/>
+    <div
+      className="relative flex items-center px-6 py-4 text-white bg-black"
+      style={{ height: "16vh" }}
+    >
+      <div className="absolute text-sm left-6">
+        <Clock />
       </div>
-      <div className="flex-2 text-center align-self-center">
-        <div
-          className="mx-auto px-4 py-2 text-4xl font-bold text-white bg-blue-300 rounded-md cursor-pointer " // Add align-self here
-          style={{ alignSelf: 'center' }} // Aligning this specific item
-          onClick={handleTitleClick}
-        >
-          {applicationsName}
+      <div className="absolute text-center transform -translate-x-1/2 cursor-pointer left-1/2">
+        <div className="py-2 text-2xl font-bold text-white">
+          Stock Management
         </div>
       </div>
-      <div className="flex-none space-y-1 text-right">
-      </div>
+
+      <div className="mt-1 text-sm text-white">{subtitle}</div>
     </div>
   );
 };
-  
+
 export default Banner;

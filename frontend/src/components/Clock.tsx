@@ -16,7 +16,9 @@ const Clock: React.FC = () => {
   }, []);
 
   return (
-    <div className="p-6 font-bold text-white bg-gray-800 rounded-md shadow-lg">
+    <div className="p-2 text-sm text-white rounded-md">
+      {" "}
+      {/* Réduction des marges et de la taille du texte */}
       <div>{dateTime.time}</div>
     </div>
   );

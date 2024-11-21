@@ -1,33 +1,53 @@
 services:
+  mongodb:
+    image: mongo:8.0
+    container_name: mongodb-container
+    #restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: genarchi
+    networks:
+      - mongo-network
+    volumes:
+      - mongo-data:/data/db # Optional: Persist MongoDB data
+
   backend:
-    image: node:18.18-alpine  
-    container_name: backend-gen
-    working_dir: /app 
+    image: node:18.18-alpine
+    container_name: backend-nlpf
+    working_dir: /app
     volumes:
       - ./backend:/app
-    entrypoint: ["sh", "-c", "npm install; cp .env-example .env ;npm run dev"]    
+    entrypoint: ["sh", "-c", "npm install; cp .env-example .env ;npm run dev"]
     environment:
-      DATABASE_URL: "mongodb://root:gen@mongodb:27017/tms?authSource=admin" # To change with AWS database. Should be modified in the .env of backend when terraform is run, and removed here
+      DATABASE_URL: "mongodb://root:genarchi@mongodb:27017/tms?authSource=admin" # Use the service name as the MongoDB host
+    depends_on:
+      - mongodb
     networks:
       - mongo-network
     ports:
       - "4000:4000" # Assuming your app runs on port 4000
 
-
   frontend:
     image: node:18
-    container_name: frontend-gen
-    working_dir: /app 
+    container_name: frontend-nlpf
+    working_dir: /app
     volumes:
       - ./frontend:/app
-    entrypoint: ["sh", "-c", "cd /app; npm install; cp .env-example .env ; npm run dev --host"]
+    entrypoint:
+      [
+        "sh",
+        "-c",
+        "cd /app; npm install; cp .env-example .env ; npm run dev --host",
+      ]
     depends_on:
       - backend
     ports:
-      - '80:5173'
+      - "80:5173"
     networks:
       - mongo-network
-    
+
 volumes:
   mongo-data:
 
